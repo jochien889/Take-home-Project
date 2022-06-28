@@ -6,13 +6,16 @@ import traceback
 import numpy as np
 import pandas as pd 
 
-class rankExtract():
-    def __init__(self, industrySort, dateTime):
+class Ranking():
+    def __init__(self, industrySort, dateTime, path = 'result/', isSave = True):
         self.dateTime = dateTime
         self.lastMonth = self.dateTime + datetime.timedelta(days = -20)
+        self.path = path
+        self.isSave = isSave
         self.industrySort = industrySort
         self.result = []
         self.rankingResult = []
+        
     def _requestsUtil(self, dateTime, ticker, retry = 1):
         try:
             url = "https://www.twse.com.tw/exchangeReport/STOCK_DAY?date={}&stockNo={}".format(self.dateTime.strftime("%Y%m%d"), ticker)
@@ -72,13 +75,18 @@ class rankExtract():
         except Exception as e:
             traceback.print_exc()
 
-    def _setRanking(self, tmpList):
+    def _setRanking(self, industry, tmpList):
         sortListofDict = sorted(tmpList, key=lambda k: k['diff'], reverse=True)[0:3]
-        formatChange = [{"ticker" : i["ticker"], "diff":"{:.2f}%".format(i["diff"] * 100)} for i in sortListofDict]
-        return formatChange
+        finalResult = [{"ticker" : i["ticker"], "diff":"{:.2f}%".format(i["diff"] * 100)} for i in sortListofDict]
+        self.rankingResult.append({'industry' : industry, 'result': finalResult})
+        print("-----------------RESULT-----------------")
+        print(f' [{self.dateTime}_{industry}]','\n', finalResult)
+        print("----------------------------------------")   
+        if self.isSave:     
+            with open(self.path + "{}_top3.json".format(industry), 'w') as File:
+                json.dump(finalResult, File, ensure_ascii = False)
 
-    ### rankExtract
-    def execute(self):
+    def rankExtract(self):
         for industry, vals in self.industrySort.items():
             tmpList = []
             print('[industry]: ', industry)
@@ -116,12 +124,4 @@ class rankExtract():
                     print(f'[ERROR_{ticker}]', thisMonthRes)
             print('[CHECKPOINT]', tmpList)
             self.result.append({'industry' : industry, 'result': tmpList})
-            finalResult = self._setRanking(tmpList)
-            self.rankingResult.append({'industry' : industry, 'result': finalResult})
-            
-            with open("result/{}_top3.json".format(industry), 'w') as File:
-                json.dump(finalResult, File, ensure_ascii = False)
-                
-            print("-----------------RESULT-----------------")
-            print(f' [{self.dateTime}_{industry}]','\n', finalResult)
-            print("----------------------------------------")
+            self._setRanking(industry, tmpList)

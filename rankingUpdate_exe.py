@@ -1,4 +1,4 @@
-from ranking import rankExtract
+from module.rankingUpdate import Ranking
 import datetime,json, pytz
 
 if __name__=='__main__':
@@ -15,5 +15,5 @@ if __name__=='__main__':
     filiter = ['水泥工業']
     test = {key:value for key, value in industrySort.items() if key in filiter}
 
-    exe = rankExtract(test, dateTime)
-    exe.execute()
+    exe = Ranking(test, dateTime)
+    exe.rankExtract()
