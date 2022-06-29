@@ -2,7 +2,7 @@ from module.rankingUpdate import Ranking
 import datetime,json, pytz
 
 if __name__=='__main__':
-    with open("listed.json", 'r', encoding="utf8") as loadFile:
+    with open("result/listed.json", 'r', encoding="utf8") as loadFile:
         stockInfo = json.load(loadFile)
         
     dateTime = datetime.datetime.now(pytz.timezone('Asia/Taipei'))
@@ -15,5 +15,5 @@ if __name__=='__main__':
     filiter = ['水泥工業']
     test = {key:value for key, value in industrySort.items() if key in filiter}
 
-    exe = Ranking(test, dateTime)
+    exe = Ranking(test, dateTime, isSave = True)
     exe.rankExtract()
