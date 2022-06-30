@@ -17,3 +17,6 @@ if __name__=='__main__':
 
     exe = Ranking(test, dateTime, isSave = True)
     exe.rankExtract()
+    finalResult = exe.rankingResult
+    with open("result/" + "{}_top3.json".format(industry), 'w') as File:
+        json.dump(finalResult, File, ensure_ascii = False)
