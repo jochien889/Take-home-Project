@@ -8,6 +8,7 @@ def stockListExtract():
     try:
         res = requests.get("https://isin.twse.com.tw/isin/C_public.jsp?strMode=2")
         content = res.text
+        print('content: ', content)
         html = etree.HTML(content)
         oldColumnName = html.xpath('//tr[1]//text()')
         NewColumnName = ['marketType', 'ticker', 'name'] + oldColumnName[1:]
