@@ -12,11 +12,10 @@ if __name__=='__main__':
             industrySort[i['industry']].append({ 'ticker': i['ticker'], 'listed_at': i['listed_at']})
         else:
             industrySort[i['industry']] = [{ 'ticker': i['ticker'], 'listed_at': i['listed_at']}]
-    filiter = ['水泥工業']
-    test = {key:value for key, value in industrySort.items() if key in filiter}
 
-    exe = Ranking(test, dateTime, isSave = True)
+    exe = Ranking(industrySort, dateTime)
     exe.rankExtract()
     finalResult = exe.rankingResult
-    with open("result/" + "{}_top3.json".format(industry), 'w') as File:
-        json.dump(finalResult, File, ensure_ascii = False)
+    for i in finalResult:
+        with open("result/{}_top3.json".format(i['industry']), 'w') as File:
+            json.dump(i['result'], File, ensure_ascii = False)
