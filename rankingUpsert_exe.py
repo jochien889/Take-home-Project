@@ -1,4 +1,4 @@
-from module.rankingUpdate import Ranking
+from module.rankingUpsert import Ranking
 import datetime,json, pytz
 
 if __name__=='__main__':

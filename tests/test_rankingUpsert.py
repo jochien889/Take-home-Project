@@ -1,5 +1,5 @@
 import requests_mock
-from module.rankingUpdate import Ranking
+from module.rankingUpsert import Ranking
 import datetime
 
 def test_standard():
