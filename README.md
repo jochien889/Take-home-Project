@@ -19,7 +19,7 @@ pipenv lock --requirements > requirements.txt
 3. 進入專案環境
 4. 安裝requirements.txt
 5. 獲取virtualenv位置執行crontab
-* (範例: 一到五10點執行stockListUpsert_exe.py更新listed.json, 一到五13點30執行rankingUpdate_exe.py更新top3.json)
+* (範例: 一到五10點執行stockListUpsert_exe.py更新listed.json, 一到五13點30分執行rankingUpdate_exe.py更新top3.json)
 
 ``` shell
 git clone https://github.com/jochien889/Take-home-Project.git
@@ -32,6 +32,7 @@ pip install -r requirements.txt
 
 # 線上環境部屬
 1. 使用github + AWS codeBuild 部屬到AWS Lambda
-2. 上市的股票資訊存入AWS RDS，可幫助資料庫正規化處理
-3. top3名單每日更新存入AWS RDS，使用AWS Lambda將每日更新名單存入S3作為log
-4. top3拉取時間太久，可多開VPC IP配合多個Lambda function 同步處理資料
+2. 使用AWS EventBridge建立Role trigger Lambda function，上市的股票資訊以每日開盤後10點執行，top3設定在每日收盤後13點30分開始執行
+3. 上市的股票資訊存入AWS RDS，可幫助資料庫正規化處理
+4. top3名單每日更新存入AWS RDS，使用AWS Lambda將每日更新名單存入S3作為log
+5. top3拉取時間太久，可多開VPC IP配合多個Lambda function 同步處理資料
